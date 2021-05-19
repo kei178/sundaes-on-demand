@@ -3,9 +3,11 @@ import { useEffect, useState } from 'react';
 import ScoopOption from './ScoopOption';
 import ToppingOption from './ToppingOption';
 import { Row } from 'react-bootstrap';
+import AlertBanner from '../common/AlertBanner';
 
 const Options = ({ optionType }) => {
   const [items, setItems] = useState([]);
+  const [error, setError] = useState(false);
 
   // optionType is 'scoops' or 'toppings'
   useEffect(() => {
@@ -14,13 +16,15 @@ const Options = ({ optionType }) => {
       .then((res) => {
         setItems(res.data);
       })
-      .catch((err) => {
-        // TODO: handle error message
-        console.log(err);
+      .catch((_err) => {
+        setError(true);
       });
   }, [optionType]);
 
-  // TODO: replace null with ToppingOptions
+  if (error) {
+    return <AlertBanner />;
+  }
+
   const ItemComponent = optionType === 'scoops' ? ScoopOption : ToppingOption;
 
   const optionItems = items.map((item) => {
