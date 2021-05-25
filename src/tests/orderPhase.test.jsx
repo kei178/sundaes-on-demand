@@ -63,10 +63,14 @@ test('order phases for happy path', async () => {
   });
   userEvent.click(tcCheckbox);
 
-  const confirmButton = screen.getByRole('button', {
+  const confirmOrderButton = screen.getByRole('button', {
     name: 'Confirm order',
   });
-  userEvent.click(confirmButton);
+  userEvent.click(confirmOrderButton);
+
+  // expect "loading" to show
+  const loading = screen.getByText(/loading/i);
+  expect(loading).toBeInTheDocument();
 
   // confirm order number on confirmation page
   // this one is async because there is a POST request to server in between
@@ -75,6 +79,10 @@ test('order phases for happy path', async () => {
     name: /thank you/i,
   });
   expect(thankYouHeader).toBeInTheDocument();
+
+  // expect that loading has disappeared
+  const notLoading = screen.queryByText('loading');
+  expect(notLoading).not.toBeInTheDocument();
 
   const orderNumber = await screen.findByText(/order number/);
   expect(orderNumber).toBeInTheDocument();
