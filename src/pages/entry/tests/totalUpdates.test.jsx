@@ -51,23 +51,17 @@ test('update topping subtotal when toppings change', async () => {
 });
 
 describe('grand total', () => {
-  test('grand total starts at $0.00', async () => {
-    render(<OrderEntry />);
-    const grandTotal = await screen.findByRole('heading', {
-      name: /grand total: \$/i,
-    });
-    expect(grandTotal).toHaveTextContent('0.00');
-  });
-
   test('grand total updates properly if scoop is added first', async () => {
     render(<OrderEntry />);
+    const grandTotal = screen.getByText('Grand total: $', { exact: false });
+    expect(grandTotal).toHaveTextContent('0.00');
+
     const vanillaInput = await screen.findByRole('spinbutton', {
       name: 'Vanilla',
     });
     userEvent.clear(vanillaInput);
     userEvent.type(vanillaInput, '1');
 
-    const grandTotal = screen.getByText('Grand total: $', { exact: false });
     expect(grandTotal).toHaveTextContent('2.00');
   });
 
@@ -80,6 +74,7 @@ describe('grand total', () => {
     const grandTotal = screen.getByText('Grand total: $', { exact: false });
     expect(grandTotal).toHaveTextContent('1.50');
   });
+
   test('grand total updates if item is removed', async () => {
     render(<OrderEntry />);
     const vanillaInput = await screen.findByRole('spinbutton', {
