@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import ScoopOption from '../ScoopOption';
 
-test.only('indicate if scoop count is non-int or out of range', () => {
+test('indicate if scoop count is non-int or out of range', () => {
   render(<ScoopOption name="" imagePath="" updateItemCount={jest.fn()} />);
 
   // negative
